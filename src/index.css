@@ -6,8 +6,35 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+*{
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+*::-webkit-scrollbar {
+  display: none;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.App {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.navLogo{
+  height: 40px;
+  margin-right: 10px;
+}
+
+
+
+@media only screen and (max-width: 991px) {
+  nav > div{
+    flex-direction: column;
+    justify-content: center;
+  }
+  nav > div > ul:first-child > li:first-child{
+    visibility: hidden;
+    display: none;
+  }
 }
