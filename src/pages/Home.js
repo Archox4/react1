@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
 import  NavControl  from './NavControl';
+import Posts from './Posts';
 
 const Home = () => {
 
@@ -20,6 +21,7 @@ const Home = () => {
   return (
     <>        
         <NavControl/>
+        <Posts/>
         <div>
 
         </div>
