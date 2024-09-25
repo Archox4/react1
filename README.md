@@ -3,7 +3,8 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 App is using external packages: 
-  - firebase - "npm install firebase"
+  - firebase@10.13.1 - "npm install firebase@10.13.1"
+  - bootstrap@5.3.3 - "npm install bootstrap@5.3.3"
 
 ## Available Scripts
 
