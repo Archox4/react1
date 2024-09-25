@@ -12,6 +12,7 @@ const NavControl = () => {
 
     function handleLogout(){
         auth.signOut();
+        navigate('/');
     }
     function getusername(){
 
@@ -19,7 +20,6 @@ const NavControl = () => {
         var data = null;
         onValue(username, (snapshot) => {
             data = snapshot.val();
-            console.log(data);
             setUsername(data);
             //navigate('/');
         })
@@ -29,9 +29,10 @@ const NavControl = () => {
         auth.onAuthStateChanged(() => {
             if(auth.currentUser != null){
                 getusername();
+                
             }
             
-            navigate('/');
+            //navigate(window.location.pathname);
         });
     }, [])
     if(auth.authStateReady){
@@ -43,7 +44,7 @@ const NavControl = () => {
                       <ul className="navbar-nav">
                           <li className='nav-item'><img className='navLogo' alt='logo' src={require("../images/logo.png")}/></li>
                           <li className="nav-item">
-                              <a className="nav-link text-center" href="#">Home</a>
+                              <a className="nav-link text-center" href="/">Home</a>
                           </li>
                           <li className="nav-item">
                               <a className="nav-link text-center" href="#">Features</a>
@@ -52,12 +53,13 @@ const NavControl = () => {
                       </ul>
                       
                       <ul className='navbar-nav'>
-                          <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{username}</a>
-                              <ul class="dropdown-menu">
-                                  <li><button class="dropdown-item" onClick={handleLogout}>Sign out</button></li>
-                              </ul>   
-                          </li>
+                        <li className='nav-item'><a href='/newPost'><button className='btn btn-secondary'>Create post</button></a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{username}</a>
+                            <ul class="dropdown-menu">
+                                <li><button class="dropdown-item" onClick={handleLogout}>Sign out</button></li>
+                            </ul>   
+                        </li>
                       </ul>
       
                   </div>
