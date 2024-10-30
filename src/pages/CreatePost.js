@@ -15,7 +15,7 @@ const CreatePost = () => {
     const [contentImage, setContentImage] = useState("");
     const [image, setImage] = useState();
     const listRef = ref(storage, 'images');
-  
+    const [status, setStatus] = useState("ready");
 
 
     function cancel(){
@@ -66,50 +66,88 @@ const CreatePost = () => {
     }
 
     async function handleSubmit(){
+        setStatus("posting");
+
        var x = true;
        var name = generateName();
+        if(image != null){
+            setStatus("posting");
 
-       while(x === true){
+            while(x === true){
         
-        var y = await imageNameExists(name);
-            if(y === false){
-                x = false;
-                if(title.length > 0 && text.length > 0){
-                    let fullImageName = name + getFileExtension(image.name);
-                    setContentImage(fullImageName);
-                    const metadata = {name: fullImageName};
-                    
-                    const imageRef = ref(storage, 'images/' + fullImageName);
-                    const postsRef = dbRef(db, "posts");
-                    // sending image
-                    const uploadTask = uploadBytes(imageRef, image, metadata).then((e) => {
-                        // getting image url
-                        getDownloadURL(imageRef).then((url) => {
-                            let date = new Date(Date.now());
+                var y = await imageNameExists(name);
+                    if(y === false){
+                        x = false;
+                        if(title.length > 0 && text.length > 0){
+                            let fullImageName = name + getFileExtension(image.name);
+                            setContentImage(fullImageName);
+                            const metadata = {name: fullImageName};
                             
-                            push(postsRef, {
-                                    contentImage: url,
-                                    contentText: text,
-                                    dislikes: 0,
-                                    likes: 0,
-                                    title: title,
-                                    uid: auth.currentUser.uid,
-                                    views: 0,
-                                    createdDate: date.toLocaleString()
+                            const imageRef = ref(storage, 'images/' + fullImageName);
+                            const postsRef = dbRef(db, "posts");
+                            // sending image
+                            const uploadTask = uploadBytes(imageRef, image, metadata).then((e) => {
+                                // getting image url
+                                getDownloadURL(imageRef).then((url) => {
+                                    let date = new Date(Date.now());
+                                    
+                                    push(postsRef, {
+                                            contentImage: url,
+                                            contentText: text,
+                                            dislikes: 0,
+                                            likes: 0,
+                                            title: title,
+                                            uid: auth.currentUser.uid,
+                                            views: 0,
+                                            createdDate: date.toLocaleString()
+                                        }, (error) => {
+                                            if(!error){
+                                                console.log(error);
+                                            } else{
+                                                console.log(error);
+                                            }
+                                        }).then(() => {
+                                            setStatus("ready");
+                                        });
+        
                                 });
-
-                        });
-                    }) ;   
-
-                }
-            } else{
-                console.log("image name exists: " + name);
-                name = generateName();
-            }
-            
-       }
+                            }) ;   
         
+                        }
+                    } else{
+                        console.log("image name exists: " + name);
+                        name = generateName();
+                    }
+                    
+               }
+        } else{
+            setStatus("posting");
+            const postsRef = dbRef(db, "posts");
+            // sending image
+            let date = new Date(Date.now());
+                
+                push(postsRef, {
+                    contentImage: '',
+                    contentText: text,
+                    dislikes: 0,
+                    likes: 0,
+                    title: title,
+                    uid: auth.currentUser.uid,
+                    views: 0,
+                    createdDate: date.toLocaleString()
+                }, (error) => {
+                    if(!error){
+                        console.log(error);
+                    } else{
+                        console.log(error);
+                    }
+                }).then(() => {
+                    setStatus("ready");
+                });
+        }
+       
         
+        setStatus("ready");
     }
 
     useEffect(() => {
@@ -119,34 +157,51 @@ const CreatePost = () => {
     }, [])
 
     if(auth.currentUser != null){
-        return (
-            <>
-            <NavControl/>
-            
-            <div className='w-100 d-flex justify-content-center flex-column align-items-center mt-4'>
-                <h2>New Post</h2>
-                <div className='w-50 mt-3'>
-                    <div className="input-group mb-3">
-                        <span className="input-group-text bg-secondary" id="inputGroup-sizing-default">Title</span>
-                        <input type="text bg-secondary" value={title} onChange={(e) => setTitle(e.target.value)} className="form-control"/>
-                    </div>
-                    <div className="input-group mb-3">
-                        <span className="input-group-text bg-secondary" id="inputGroup-sizing-default">Image</span>
-                        <input type="file" onChange={(e) => setImage(e.target.files[0])} className="form-control"/>
-                    </div>
-                    <div className="input-group">
-                        <span className="input-group-text bg-secondary">Text</span>
-                        <textarea className="form-control" value={text} onChange={(e) => setText(e.target.value)} aria-label="With textarea" rows="5" maxLength="260"></textarea>
-                    </div>
-                    <div className="input-group d-flex justify-content-end mt-2">
-                        <button className='btn btn-danger me-2' onClick={cancel}>Cancel</button>
-                        <button className='btn btn-primary' onClick={handleSubmit}>Create post</button>
+        
+        if(status === "ready"){
+            return (
+                <>
+                <NavControl/>
+                
+                <div className='w-100 d-flex justify-content-center flex-column align-items-center mt-4'>
+                    <h2 className='text-light'>New Post</h2>
+                    <div className='w-50 mt-3'>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text bg-secondary" id="inputGroup-sizing-default">Title</span>
+                            <input type="text bg-secondary" value={title} onChange={(e) => setTitle(e.target.value)} className="form-control"/>
+                        </div>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text bg-secondary" id="inputGroup-sizing-default">Image</span>
+                            <input type="file" onChange={(e) => setImage(e.target.files[0])} className="form-control"/>
+                        </div>
+                        <div className="input-group">
+                            <span className="input-group-text bg-secondary">Text</span>
+                            <textarea className="form-control" value={text} onChange={(e) => setText(e.target.value)} aria-label="With textarea" rows="10" maxLength="260"></textarea>
+                        </div>
+                        <div className="input-group d-flex justify-content-end mt-2">
+                            <button className='btn btn-danger me-2' onClick={cancel}>Cancel</button>
+                            <button className='btn btn-primary' onClick={handleSubmit}>Create post</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-                
+                    
+                </>
+            )
+        } else if(status === "posting"){
+            return (
+                <>
+                <NavControl/>
+
+                <div className='w-100 h-100 d-flex justify-content-center mt-4'>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Creating new post...</span>
+                    </div>
+                </div>
             </>
-        )
+            )
+        }
+
+        
 
     } else{
         return (

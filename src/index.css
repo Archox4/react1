@@ -1,10 +1,12 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Montserrat", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('/src/images/bg1.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
 }
 *{
   -ms-overflow-style: none;  /* IE and Edge */
@@ -14,8 +16,7 @@ body {
   display: none;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: "Montserrat", sans-serif;
 }
 .App {
   margin-left: 10px;
@@ -25,8 +26,30 @@ code {
   height: 40px;
   margin-right: 10px;
 }
+nav > div > ul > li > a:hover{
+  animation-name: navHoverAnimBg;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+nav{
+  background-image: url("/src/images/nav1.png");
+}
+#postsUl > li > a > div{
+  background-color: #212529;
+}
 
-
+#post_box{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#post_box > div {
+  background-color: #212529;
+  color: white;
+}
+@keyframes navHoverAnimBg{
+  from{ background-color: #212529;}
+  to{ background-color: #2b3035;}
+}
 
 @media only screen and (max-width: 991px) {
   nav > div{

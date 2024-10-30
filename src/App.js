@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import CreatePost from './pages/CreatePost';
+import PostExtended from './pages/PostExtended';
 
 
 function App() {
@@ -17,8 +18,10 @@ function App() {
               <Route path="/signup" element={<Signup/>}/>
               <Route path="/login" element={<Login/>}/>
               <Route path="/newPost" element={<CreatePost/>}/>
+              <Route path="/post" element={<PostExtended/>}/>
             </Routes>                    
         </section>
+        
       </div>
     </Router>
   );
